@@ -1,0 +1,28 @@
+<html>
+	<script>
+		var delay = localStorage["delay"]; //Delay after every update
+		var pnr = localStorage["pnr"];//"http://punetwocruise01.thoughtworks.com:8080/dashboard/cctray.xml"; //URL to the cctray.xml
+		
+		function getUpdateFrom() {
+			var req = new XMLHttpRequest();
+			req.open("GET",url,true);
+			req.onload = updateIcon;
+			req.send();
+		}
+
+		function updateIcon() {
+			var projects = this.responseXML.getElementsByTagName("Project");
+			var bgPage = chrome.extension.getBackgroundPage();
+			bgPage.projects = projects;
+			for (var i = 0, project; project = projects[i]; i++)
+				if(project.getAttribute("lastBuildStatus") == "Success")
+					chrome.browserAction.setIcon({path:"images/cc_passed.png"});
+				else if(project.getAttribute("lastBuildStatus") == "Failure")
+					chrome.browserAction.setIcon({path:"images/cc_failed.png"});
+				else
+					chrome.browserAction.setIcon({path:"images/cc_unreachebale.png"});
+		}
+
+		setInterval(getUpdateFrom,delay);
+	</script>
+</html>

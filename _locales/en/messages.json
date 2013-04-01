@@ -1,0 +1,8 @@
+{
+	"extension_description": { 
+		"message": "Displays the PNR Status as on Indianrail.gov.in" 
+		}, 
+	"extension_name": { 
+		"message": "PNR Status" 
+		}
+}

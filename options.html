@@ -1,0 +1,81 @@
+<html>
+<head><title>PNR Status Options</title>
+<style>
+.error {
+	border: 1px solid red;
+}
+</style>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+	if(!validate())
+		return;
+
+	var pnr = document.getElementById("pnr");
+	var delay = document.getElementById("delay");
+  
+	localStorage["pnr"] = pnr.value;
+	localStorage["delay"] = delay.value;
+
+	// Update status to let user know options were saved.
+	var status = document.getElementById("status");
+	status.innerHTML = "Options Saved.";
+	setTimeout(function() {
+		status.innerHTML = "";
+  		}, 750);
+}
+
+function validate(){
+	var pnr = document.getElementById("pnr");
+	var delay = document.getElementById("delay");
+
+	var delayRegex = /^\d+$/; //new RegExp("");
+	var pnrRegex = /^\d{10}$/; //new RegExp("");
+
+	var error = '';
+	if(delay.value.search(delayRegex)) {
+		error = '<li>The delay should be a number</li>';
+		delay.setAttribute('class','error');
+	} else
+		delay.setAttribute('class','');
+	if(pnr.value.search(pnrRegex)) {
+		error += '<li>The PNR should be a 10 digit number</li>';
+		pnr.setAttribute('class','error');
+	} else
+		pnr.setAttribute('class','');
+
+	if(error == '')
+		return true;
+		
+	// Update status to let user know options were saved.
+	var status = document.getElementById("status");
+	status.innerHTML = '<ul>'+error+'</ul>';
+  	return false;
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+	var pnr = document.getElementById("pnr");
+	pnr.value = localStorage["pnr"];
+
+	var delay = document.getElementById("delay");
+	delay.value = localStorage["delay"];
+}
+
+</script>
+
+</head>
+<body onload="restore_options()">
+<span id="status"></span>
+<br />
+PNR Number:
+<input id="pnr" size="10" type="text" />
+
+<br />
+Delay:
+<input id="delay" size="8" type="text" />
+<br />
+<button onclick="save_options()">Save</button>
+</body>
+</html>
